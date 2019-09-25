@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+  
+  <head>
+    <title>Ants and Pole——Object-oriented analysis and design practice Lab 1</title>
+    <meta name="description" content="Object-oriented analysis and design practice Lab 1" />
+    <link href="style.css" rel="stylesheet" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600" rel="stylesheet" />
+    <!-- favicon -->
+    <link rel="icon" type="image/png" href="favicons/ant-64x64.png" sizes="64x64" />
+    <meta name="theme-color" content="#0b1d31" />
+    <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+  </head>
+  
+  <body ontouchstart="">
+    <div class="main-wrapper">
+      <!-- SPLASH/LOADING PAGE -->
+      <div id="pageSplash" class="page-cont page-splash page-faded-bg">
+        <div class="fixed-75w-wrapper">
+          <div id="splashScreenLogo" class="tpbl-circle c-white splash-screen-logo"></div>
+          <div id="splashScreenTxt">Loading</div></div>
+      </div>
+
+      <!-- HOME PAGE -->
+      <div id="pageHome" class="page-cont page-game-menu page-faded-bg">
+        <div class="fixed-75w-wrapper">
+          <div class="gm-menu-header-cont">
+            <div class="tpbl-circle c-blue gm-menu-logo-bg"></div>
+            <h1 class="gm-menu-title">Ants and Pole</h1>
+            <h2 class="gm-menu-subtitle">Object-oriented analysis and design practice Lab 1</h2></div>
+          <button id="StartBtn" class="gm-btn btn-blue" type="button" name="button">Start</button>
+          <button id="aboutBtn" class="gm-btn" type="button" name="button">About</button></div>
+      </div>
+
+      <!-- ABOUT PAGE -->
+      <div id="pageAbout" class="page-cont page-about page-faded-bg anmtd-grdnt-bg blu-grdnt-bg no-bg">
+        <div class="fixed-75w-wrapper">
+          <div class="info-screen-title-cont">
+            <div class="info-screen-ttl-txt-bld">About</div>
+          </div>
+          <div class="info-screen-txt-cont">
+            <div>instructor</div>
+            <a href="https://faculty.ecnu.edu.cn/s/601/main.jspy" class="txt-bold">姜宁康</a>
+            <hr/>
+            <div>developers</div>
+            <a>安一<br/>杨晓妍<br/>刘鹭语</a>
+          </div>
+            <div id="abtPageBackBtn" class="tpbl-circle c-white submit-circle"></div>
+        </div>
+      </div>
+
+    <!-- GAME TUTORIAL PAGE <div id="pageTutorial" class="page-cont page-tutorial page-faded-bg">
+    <div class="fixed-100w-wrapper">
+    <div id="tutPgStartGameBtn" class="tpbl-circle c-blue tut-circle"></div>
+    <div class="tut-arrow"></div>
+    <h2 class="tut-text">TAP THE CIRCLE<br/>TO START</h2></div>
+    </div>
+    -->
+    <!-- MODE SETTING PAGE -->
+    <div id="pageModeSetting" class="page-cont page-game-menu page-faded-bg">
+      <div class="fixed-75w-wrapper">
+        <div class="gm-menu-header-cont">
+          <div class="tpbl-circle c-blue gm-menu-logo-bg"></div>
+        </div>
+        <button id="StandardModeBtn" class="gm-btn btn-blue" type="button" name="button">标准模式</button>
+        <button id="CustomModeBtn" class="gm-btn" type="button" name="button">自定义模式</button></div>
+    </div>
+
+    <!-- STANDARD MODE PAGE -->
+    <div id="pageStandardMode" class="page-cont page-game-menu page-faded-bg">
+      <div class="fixed-75w-wrapper">
+        <div class="gm-menu-header-cont">
+          <div class="tpbl-circle c-blue gm-menu-logo-bg"></div>
+        </div>
+        <button id="MaxAndMinTimeBtn" class="gm-btn btn-blue" type="button" name="button">查看用时最长和最短动画</button>
+        <button id="DirectionSettingBtn" class="gm-btn" type="button" name="button">自定义蚂蚁起始方向</button>
+        </div>
+    </div>
+    <!-- CUSTOM MODE PAGE -->
+    <div id="pageCustomMode" class="page-cont page-game-menu page-faded-bg">
+      <div class="fixed-75w-wrapper">
+        <div class="gm-menu-header-cont">
+          <div class="tpbl-circle c-blue gm-menu-logo-bg"></div>
+        </div>
+        <form name="formCustomMode" action="" >杆长 :
+          <br />
+          <input id="poleLength" type="text" />cm
+          <br />蚂蚁个数 :
+          <br />
+          <input id="antNum" type="text" />只
+          <br />
+          <br />
+          <div id="NextStep1Btn" class="tpbl-circle c-white submit-circle"></div></form>
+      </div>
+    </div>
+    <!-- POSITION SETTING PAGE -->
+    <div id="pagePositionSetting" class="page-cont page-game-menu page-faded-bg">
+      <div class="fixed-75w-wrapper">
+        <div class="gm-menu-header-cont">
+          <div class="tpbl-circle c-blue gm-menu-logo-bg"></div>
+        </div>
+        <form name="formPositionSetting" action="">
+          <ul id="ulPositionSetting"></ul>
+          <div id="NextStep2Btn" class="tpbl-circle c-white submit-circle"></div>
+        </form>
+      </div>
+    </div>
+
+    <!-- DIRECTION SETTING PAGE -->
+    <div id="pageDirectionSetting" class="page-cont page-game-menu page-faded-bg">
+      <div class="fixed-75w-wrapper">
+        <div class="gm-menu-header-cont">
+          <div class="tpbl-circle c-blue gm-menu-logo-bg"></div>
+        </div>
+        <form action="" name="formDirectionSetting">
+          <ul id="ulDirectionSetting"></ul>
+          <div id="ShowBtn" class="tpbl-circle c-white submit-circle"></div>
+        </form>
+      </div>
+    </div>
+
+
+    <!-- MAX AND MIN TIME PAGE -->
+    <div id="pageMaxAndMinTime" class="page-cont page-game-menu page-faded-bg">
+      <div class="fixed-75w-wrapper">
+        <div class="gm-menu-header-cont">
+          <br>最长用时动画
+          <div class="MaxTime"></div>
+          <img class="pole" src="images/pole.png" style="height:80%;width:100%;">
+          <br>最短用时动画
+          <div class="MinTime"></div>
+          <img class="pole" src="images/pole.png" style="height:80%;width:100%;">
+
+        	<ul id="ulMaxAndMinTime"></ul>  
+
+          <div id="mmatPageBackBtn" class="tpbl-circle c-white submit-circle"></div>
+        </div>
+      </div>
+    </div>
+
+     <!-- TOTAL TIME PAGE -->
+    <div id="pageTotalTime" class="page-cont page-game-menu page-faded-bg">
+      <div class="fixed-75w-wrapper">
+        <div class="gm-menu-header-cont">
+        	固定方向动画
+        	<ul id="ulTotalTime"></ul>
+          <div id="ttPageBackBtn" class="tpbl-circle c-white submit-circle"></div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- logic & brain -->
+    <script src="js/antAndPole.js"></script>
+  </body>
+
+</html>
