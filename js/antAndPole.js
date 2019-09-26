@@ -21,17 +21,11 @@ var pageAbout = document.querySelector('#pageAbout');
 // --
 var abtPageBackBtn = document.querySelector('#abtPageBackBtn');
 
-// Tutorial Page
-//var pageTutorial = document.querySelector('#pageTutorial');
-// --
-//var tutPgStartGameBtn = document.querySelector('#tutPgStartGameBtn');
-
 // Mode Setting Page
 var pageModeSetting = document.querySelector('#pageModeSetting');
 // --
 var StandardModeBtn = document.querySelector('#StandardModeBtn');
 var CustomModeBtn = document.querySelector('#CustomModeBtn');
-
 
 // Standard Mode Page
 var pageStandardMode = document.querySelector('#pageStandardMode');
@@ -46,7 +40,6 @@ var PoleLengthInput = document.querySelector('#PoleLengthInput');
 var AntNumInput = document.querySelector('#AntNumInput');
 var NextStep1Btn = document.querySelector('#NextStep1Btn');
 
-
 // Position Setting Page
 var pagePositionSetting = document.querySelector('#pagePositionSetting');
 // --
@@ -58,6 +51,12 @@ var NextStep2Btn = document.querySelector('#NextStep2Btn');
 var pageDirectionSetting = document.querySelector('#pageDirectionSetting');
 // --
 var ShowBtn = document.querySelector('#ShowBtn');
+
+// Tutorial Page
+var pageTutorial = document.querySelector('#pageTutorial');
+// --
+var tutPgStartGameBtn = document.querySelector('#tutPgStartGameBtn');
+
 
 // Max And Min Time Page
 var pageMaxAndMinTime = document.querySelector('#pageMaxAndMinTime');
@@ -74,7 +73,7 @@ var pagesArray = [
   pageSplash, pageHome, pageAbout, pageModeSetting, 
   pageCustomMode, pagePositionSetting, pageDirectionSetting, 
   pageMaxAndMinTime, pageTotalTime
-]
+];
 
 // glabal data
 var poleLength = 300;
@@ -137,8 +136,6 @@ toolsBox = {
 // ===============================================================
 
 
-
-
 // -------------------------------------------- //
 // ---------------- Audio Pool --------------- //
 
@@ -197,10 +194,6 @@ audioPool.addSounds(); // Add sounds to the page in separate audio players
 
 
 // ------------------ Buttons ------------------ //
-// Stop the rubber effect on iOS
-document.ontouchmove = function(e) {
-  e.preventDefault();
-}
 
 // Home Buttons
 // -- Start Button
@@ -277,17 +270,10 @@ StandardModeBtn.addEventListener('click', function() {
   }
 
 
-
-
-
-
-
-
-
-
   toolsBox.showPage(pageStandardMode);
   toolsBox.hidePage(pageModeSetting);
 }, false);
+
 // -- Custom Mode Button
 CustomModeBtn.addEventListener('click', function() {
   audioPool.playSound(buttonTap);
@@ -302,6 +288,7 @@ function selectDirection(i,direction){
 };
 DirectionSettingBtn.addEventListener('click', function() {
   audioPool.playSound(buttonTap);
+
   var div = document.getElementById("ulDirectionSetting");  
   while (div.hasChildNodes()){ 
     div.removeChild(div.firstChild); }
@@ -342,7 +329,6 @@ MaxAndMinTimeBtn.addEventListener('click', function() {
     success:function(result){
       maxTimeState = JSON.parse(result);
       console.log(maxTimeState);
-      console.log(result);
     },
     error:function(xhr,textStatus){  
       alert('error', xhr.responseText);
@@ -369,14 +355,13 @@ MaxAndMinTimeBtn.addEventListener('click', function() {
     success:function(result){
       minTimeState = JSON.parse(result);
       console.log(minTimeState);
-      console.log(result);
     },
     error:function(xhr,textStatus){  
       alert('error', xhr.responseText);
       console.log(xhr);
       console.log(textStatus);  
     }  
-  }); 
+  });
 
 
   for(var i=0; i<antNum; i++){
@@ -400,22 +385,16 @@ MaxAndMinTimeBtn.addEventListener('click', function() {
 
   toolsBox.hidePage(pageStandardMode);
 
-  $(".greenBlock").animate({left:'250px'});
+  toolsBox.showPage(pageMaxAndMinTime);
+
+  $(".greenBlock").animate({left:'250px'},50000);
   for(var i in maxTimeState){
     alert(i);
     for(var j in maxTimeState[i]){
       $(".antOfMin"+i).animate({left:maxTimeState[i][j].location+'px'});
     }
-    
   }
-  var div = document.getElementById("ulMaxAndMinTime");   
-  while (div.hasChildNodes()){ 
-    div.removeChild(div.firstChild); }
-  $('ul').append(
-          '杆长:'+poleLength+'<br>'+
-          '蚂蚁数:'+antNum+'<br>'+
-          '蚂蚁数据:'+ants+'<br><br>');
-  toolsBox.showPage(pageMaxAndMinTime);
+
 }, false);
 
 
@@ -534,7 +513,7 @@ ShowBtn.addEventListener('click', function() {
         console.log(textStatus);  
       }  
     }); 
-  }
+  };
 
   $.ajax({  
     url : "http://47.100.30.181:8080/getState", 
@@ -564,16 +543,9 @@ ShowBtn.addEventListener('click', function() {
         console.log(xhr);
         console.log(textStatus);  
       }  
-    }); 
+  }); 
 
   toolsBox.hidePage(pageDirectionSetting);
-  var div = document.getElementById("ulTotalTime");  
-  while (div.hasChildNodes()){ 
-    div.removeChild(div.firstChild); }
-  $('ul').append(
-          '杆长:'+poleLength+'<br>'+
-          '蚂蚁数:'+antNum+'<br>'+
-          '蚂蚁数据:'+ants+'<br><br>');
   toolsBox.showPage(pageTotalTime);
 
 }, false);
