@@ -85,10 +85,10 @@
         </div>
         <form name="formCustomMode" action="" >杆长 :
           <br />
-          <input id="poleLength" type="text" />cm
+          <input id="poleLength" type="text" class="form-control"/>cm
           <br />蚂蚁个数 :
           <br />
-          <input id="antNum" type="text" />只
+          <input id="antNum" type="text" class="form-control"/>只
           <br />
           <br />
           <div id="NextStep1Btn" class="tpbl-circle c-white submit-circle"></div></form>
@@ -101,7 +101,7 @@
           <div class="tpbl-circle c-blue gm-menu-logo-bg"></div>
         </div>
         <form name="formPositionSetting" action="">
-          <ul id="ulPositionSetting"></ul>
+          <ul class="ulPositionSetting" id="positionSetting"></ul>
           <div id="NextStep2Btn" class="tpbl-circle c-white submit-circle"></div>
         </form>
       </div>
@@ -126,10 +126,10 @@
       <div class="fixed-75w-wrapper">
         <div class="gm-menu-header-cont">
           <br>最长用时动画
-          <div class="MaxTime"></div><br>
+          <div class="MaxTime" id="MaxTime"></div><br>
           <img class="pole" src="images/pole.png" style="height:80px;width:400px;">
           <br>最短用时动画
-          <div class="MinTime"></div><br>
+          <div class="MinTime" id="MinTime"></div><br>
           <img class="pole" src="images/pole.png" style="height:80px;width:400px;">
 
         	<ul id="ulMaxAndMinTime"></ul>  

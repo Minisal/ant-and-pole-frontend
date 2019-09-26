@@ -52,10 +52,6 @@ var pageDirectionSetting = document.querySelector('#pageDirectionSetting');
 // --
 var ShowBtn = document.querySelector('#ShowBtn');
 
-// Tutorial Page
-var pageTutorial = document.querySelector('#pageTutorial');
-// --
-var tutPgStartGameBtn = document.querySelector('#tutPgStartGameBtn');
 
 
 // Max And Min Time Page
@@ -81,6 +77,7 @@ var antNum = 5;
 var position = 0;
 var speed = 5;
 var direction = -1;
+
 var ants = [ // position, speed, direction
   [30, 5, -1],
   [80, 5, -1],
@@ -94,6 +91,8 @@ var customTime = 0;
 var maxTimeState;
 var minTimeState;
 var customTimeState;
+
+var dataPreparedFlag = true;
 
 
 // ===============================================================
@@ -199,12 +198,13 @@ audioPool.addSounds(); // Add sounds to the page in separate audio players
 // -- Start Button
 StartBtn.addEventListener('click', function() {
   audioPool.playSound(buttonTap);
-   
+
   $.ajax({  
     url : "http://47.100.30.181:8080/clear", 
     type : "post",  
     success:function(result){
-      console.log('success');
+      console.log('clear success');
+      dataPreparedFlag = false;
     },
     error:function(xhr,textStatus){  
       alert('error', xhr.responseText);
@@ -235,23 +235,27 @@ abtPageBackBtn.addEventListener('click', function() {
 // -- Standard Mode Button
 StandardModeBtn.addEventListener('click', function() {
   audioPool.playSound(buttonTap);
+
   $.ajax({  
     url : "http://47.100.30.181:8080/initPole", 
     type : "post",  
     data:{
-      length:poleLength
+      length: poleLength
     },
     success:function(result){
-      console.log('success');
+      console.log('init pole success'+poleLength);
     },
     error:function(xhr,textStatus){  
       alert('error', xhr.responseText);
       console.log(xhr);
       console.log(textStatus);  
     }  
-  }); 
+  });
+
   for(var i=0; i<antNum; i++){
-    $.ajax({  
+    var count = 0; // count success ajax
+    toolsBox.sleep(100); // Prevents the backend incorrectly receiving only one ajax request
+    $.ajax({
       url : "http://47.100.30.181:8080/addAnt", 
       type : "post",  
       data:{
@@ -259,19 +263,14 @@ StandardModeBtn.addEventListener('click', function() {
         speed:ants[i][1]
       },
       success:function(result){
-        console.log('success');
-      },
-      error:function(xhr,textStatus){  
-        alert('error', xhr.responseText);
-        console.log(xhr);
-        console.log(textStatus);  
-      }  
-    }); 
+        count++;
+        if(count==antNum) {
+          toolsBox.showPage(pageStandardMode);
+          toolsBox.hidePage(pageModeSetting);
+        }
+      }
+    });
   }
-
-
-  toolsBox.showPage(pageStandardMode);
-  toolsBox.hidePage(pageModeSetting);
 }, false);
 
 // -- Custom Mode Button
@@ -309,93 +308,69 @@ DirectionSettingBtn.addEventListener('click', function() {
 // -- Max And Min Time Button
 MaxAndMinTimeBtn.addEventListener('click', function() {
   audioPool.playSound(buttonTap);
-  
-  $.ajax({  
-    url : "http://47.100.30.181:8080/getMaxTime", 
-    type : "post",  
-    success:function(result){
-      maxTime = result;
-      console.log('maxTime:'+maxTime);
-    },
-    error:function(xhr,textStatus){  
-      alert('error', xhr.responseText);
-      console.log(xhr);
-      console.log(textStatus);  
-    }  
-  }); 
-  $.ajax({  
-    url : "http://47.100.30.181:8080/getMaxTimeState", 
-    type : "post",  
-    success:function(result){
-      maxTimeState = JSON.parse(result);
-      console.log(maxTimeState);
-    },
-    error:function(xhr,textStatus){  
-      alert('error', xhr.responseText);
-      console.log(xhr);
-      console.log(textStatus);  
-    }  
-  }); 
-  $.ajax({  
-    url : "http://47.100.30.181:8080/getMinTime", 
-    type : "post",  
-    success:function(result){
-      minTime = result;
-      console.log('minTime:'+minTime);
-    },
-    error:function(xhr,textStatus){  
-      alert('error', xhr.responseText);
-      console.log(xhr);
-      console.log(textStatus);  
-    }  
-  }); 
-  $.ajax({  
-    url : "http://47.100.30.181:8080/getMinTimeState", 
-    type : "post",  
+
+  console.log("get min");
+  $.ajax({
+    url : "http://47.100.30.181:8080/getMinTimeState",
+    type : "post",
     success:function(result){
       minTimeState = JSON.parse(result);
       console.log(minTimeState);
-    },
-    error:function(xhr,textStatus){  
-      alert('error', xhr.responseText);
-      console.log(xhr);
-      console.log(textStatus);  
-    }  
+      $.ajax({
+        url : "http://47.100.30.181:8080/getMinTime",
+        type : "post",
+        success:function(result){
+          minTime = result;
+          console.log('minTime:'+minTime);
+        }
+      });
+    }
   });
+  toolsBox.sleep(1000);
+  console.log("get max");
+  $.ajax({
+    url : "http://47.100.30.181:8080/getMaxTimeState",
+    type : "post",
+    success:function(result){
+      maxTimeState = JSON.parse(result);
+      console.log(maxTimeState);
+      $.ajax({
+        url : "http://47.100.30.181:8080/getMaxTime",
+        type : "post",
+        success:function(result){
+          maxTime = result;
+          console.log('maxTime:'+maxTime);
+        }
+      });
+    }
+  });
+  toolsBox.sleep(1000);
 
-
-  for(var i=0; i<antNum; i++){
-    $(".MinTime").append(
-                '<img class = "antOfMax'+i+'" src="images/ant'+i%15+'.png"'+
-                'alt="Ant" style="left:'+ants[i][0]/poleLength*400+'px;'+
-                'height:40px;width:40px;position:absolute;">'
-                );
-    $(".MaxTime").append(
-                '<img class = "antOfMin'+i+'" src="images/ant'+i%15+'.png"'+
-                'alt="Ant" style="left:'+ants[i][0]/poleLength*400+'px;'+
-                'height:42px;width:42px;position:absolute;">'
-                )
+  var MaxTime = document.getElementById("MaxTime");
+  var MinTime = document.getElementById("MinTime");
+  while (MaxTime.hasChildNodes()){
+    MaxTime.removeChild(MaxTime.firstChild);
+    MinTime.removeChild(MinTime.firstChild);
   }
 
-  
-
-
-
-
-
   toolsBox.hidePage(pageStandardMode);
-
   toolsBox.showPage(pageMaxAndMinTime);
 
-  $(".greenBlock").animate({left:'250px'},50000);
-  for(var i in maxTimeState){
-    alert(i);
-    for(var j in maxTimeState[i]){
-      $(".antOfMin"+i).animate({left:maxTimeState[i][j].location+'px'});
-    }
+  for(var i=0; i<antNum; i++){
+    $(".MaxTime").append(
+        '<img class = "antOfMax'+i+'" src="images/ant'+i%15+'.png"'+
+        'alt="Ant" style="left:'+ants[i][0]/poleLength*400+'px;'+
+        'height:40px;width:40px;position:absolute;">'
+    );
+    $(".MinTime").append(
+        '<img class = "antOfMin'+i+'" src="images/ant'+i%15+'.png"'+
+        'alt="Ant" style="left:'+ants[i][0]/poleLength*400+'px;'+
+        'height:42px;width:42px;position:absolute;">'
+    )
   }
 
 }, false);
+
 
 
 
@@ -428,7 +403,7 @@ NextStep1Btn.addEventListener('click', function() {
       length:poleLength
     },
     success:function(result){
-      console.log('success');
+      console.log('init pole success');
     },
     error:function(xhr,textStatus){  
       alert('error', xhr.responseText);
@@ -439,23 +414,23 @@ NextStep1Btn.addEventListener('click', function() {
 
   
   toolsBox.hidePage(pageCustomMode);
-  var div = document.getElementById("ulPositionSetting");   
-  while (div.hasChildNodes()){ 
-    div.removeChild(div.firstChild); }
+  var ul = document.getElementById("positionSetting");
+  while (ul.hasChildNodes()){
+    ul.removeChild(div.firstChild); }
   for(var i=0; i<antNum; i++){
     if(ants[i]){
-      $('ul').append(
+      $('ulPositionSetting').append(
           '蚂蚁'+i+'位置 :'+
-          '<input type="text" value="'+ants[i][0]+'" oninput="inputPosition('+i+',this.value)"> cm'+
+          '<input type="text" value="'+ants[i][0]+'" oninput="inputPosition('+i+',this.value)" class="form-control"> cm'+
           '速度 :'+
-          '<input type="text" value="'+ants[i][1]+'" oninput="inputSpeed('+i+',this.value)"id="speed'+i+'"> cm/s'+
+          '<input type="text" value="'+ants[i][1]+'" oninput="inputSpeed('+i+',this.value)"id="speed'+i+'" class="form-control"> cm/s'+
           '<br>')
     }else{
-      $('ul').append(
+      $('ulPositionSetting').append(
           '蚂蚁'+i+'位置 :'+
-          '<input type="text" value="0" oninput="inputPosition('+i+',this.value)"> cm'+
+          '<input type="text" value="0" oninput="inputPosition('+i+',this.value)" class="form-control"> cm'+
           '速度 :'+
-          '<input type="text" value="0" oninput="inputSpeed('+i+',this.value)"id="speed'+i+'"> cm/s'+
+          '<input type="text" value="0" oninput="inputSpeed('+i+',this.value)"id="speed'+i+'" class="form-control"> cm/s'+
           '<br>')
     }
     
@@ -468,6 +443,7 @@ NextStep1Btn.addEventListener('click', function() {
 // -- Next Step2 Button
 NextStep2Btn.addEventListener('click', function() {
   audioPool.playSound(buttonTap);
+  var count = 0;
   for(var i=0; i<antNum; i++){
     toolsBox.sleep(100);
     $.ajax({  
@@ -479,16 +455,15 @@ NextStep2Btn.addEventListener('click', function() {
       },
       success:function(result){
         console.log(result);
-      },
-      error:function(xhr,textStatus){  
-        alert('error'+i, xhr.responseText);
-        console.log(xhr);
-        console.log(textStatus);  
-      }  
-    }); 
+        count++;
+        if(count==antNum){
+          toolsBox.hidePage(pagePositionSetting);
+          toolsBox.showPage(pageStandardMode);
+        }
+      }
+    });
   };
-  toolsBox.hidePage(pagePositionSetting);
-  toolsBox.showPage(pageStandardMode);
+
   
 }, false);
 
@@ -505,7 +480,7 @@ ShowBtn.addEventListener('click', function() {
         id:i
       },
       success:function(result){
-        console.log('success'+i);
+        console.log('set deriction success'+i);
       },
       error:function(xhr,textStatus){  
         alert('error'+i, xhr.responseText);
@@ -534,7 +509,7 @@ ShowBtn.addEventListener('click', function() {
       url : "http://47.100.30.181:8080/getTime", 
       type : "post",  
       success:function(result){
-        console.log('success');
+        console.log('get time success');
         customTime = result;
         console.log(customTime);
       },
@@ -553,26 +528,89 @@ ShowBtn.addEventListener('click', function() {
 
 // Max And Min Time Buttons
 // -- Back Button
+var pageClick1 = 0;
 mmatPageBackBtn.addEventListener('click', function() {
   audioPool.playSound(buttonTap);
 
-  poleLength = 300;
-  antNum = 5;
-  position = 0;
-  speed = 5;
-  direction = -1;
-  ants = [ // position, speed, direction
-    [30, 5, -1],
-    [80, 5, -1],
-    [110, 5, -1],
-    [160, 5, -1],
-    [250, 5, -1]
-  ]; 
-  maxTime, minTime, customTime = 0;
-  maxTimeState, minTimeState, customTimeState = null;
+  if(pageClick1%2==0){
+    //animation
+    var lastOrder = new Array();
+    for(var i in minTimeState){
 
-  toolsBox.showPage(pageHome);
-  toolsBox.hidePage(pageMaxAndMinTime);
+      for(var id=0; id<antNum; id++) {
+
+        for (var j in minTimeState[i]) {
+          if(i == 0 && minTimeState[i][j].id==id){
+            lastOrder[id]=j;
+     //       console.log("last order["+id+"]="+j);
+          }
+          if (i > 0 && minTimeState[i][j].id==id) {
+      //      console.log(i-1+":"+id+":"+lastOrder[id]);
+      //      console.log(minTimeState[i - 1][lastOrder[id]]);
+
+            var moveDistance = minTimeState[i][j].location - minTimeState[i - 1][lastOrder[id]].location;
+            lastOrder[id]=j;
+            //            console.log("last order["+id+"]="+j);
+            moveDistance = moveDistance > 0 ? moveDistance : -moveDistance;
+            var moveTime = moveDistance / minTimeState[i][j].speed;
+            var position = minTimeState[i][j].location * 400 / poleLength;
+            //   console.log("state" + i + " ant" + id + ":" + moveDistance+","+moveTime);
+            $(".antOfMin" + minTimeState[i][j].id).animate(
+                {left: position + 'px'}, moveTime*200,"linear");
+          }
+        }
+      }
+    }
+
+    for(var i in maxTimeState){ // i state
+      for(var id=0; id<antNum; id++) {
+
+        for (var j in maxTimeState[i]) { // j live ant
+          if( i == 0&& minTimeState[i][j].id==id) lastOrder[id] =j;
+          //      console.log("last order["+id+"]="+j);
+          if (i > 0 && maxTimeState[i][j].id==id) {
+            var moveDistance = maxTimeState[i][j].location - maxTimeState[i - 1][lastOrder[id]].location;
+            lastOrder[id] = j;
+            //          console.log("last order["+id+"]="+j);
+            moveDistance = moveDistance > 0 ? moveDistance : -moveDistance;
+            var moveTime = moveDistance / maxTimeState[i][j].speed;
+            var position = maxTimeState[i][j].location * 400 / poleLength;
+            //          console.log("state" + i + " ant" + id + ":" + moveDistance+","+moveTime);
+            $(".antOfMax" + maxTimeState[i][j].id).animate(
+                {left: position + 'px'}, moveTime*200,"linear");
+          }
+
+        }
+      }
+    }
+
+
+
+
+  }
+  if(pageClick1%2==1){
+    // back to home
+    poleLength = 300;
+    antNum = 5;
+    position = 0;
+    speed = 5;
+    direction = -1;
+    ants = [ // position, speed, direction
+      [30, 5, -1],
+      [80, 5, -1],
+      [110, 5, -1],
+      [160, 5, -1],
+      [250, 5, -1]
+    ];
+    maxTime, minTime, customTime = 0;
+    maxTimeState, minTimeState, customTimeState = null;
+
+    toolsBox.showPage(pageHome);
+    toolsBox.hidePage(pageMaxAndMinTime);
+
+  }
+
+  pageClick1++;
 }, false);
 
 // Total Time Page Buttons
@@ -598,7 +636,6 @@ ttPageBackBtn.addEventListener('click', function() {
   toolsBox.showPage(pageHome);
   toolsBox.hidePage(pageTotalTime);
 }, false);
-
 
 
 // Hide Splash Screen when everything is loaded
