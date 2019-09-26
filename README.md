@@ -7,3 +7,5 @@ Terminal >
 `
 open -n /Applications/Google\ Chrome.app/ --args --disable-web-security  --user-data-dir=/Users/yourname/MyChromeDevUserData/
 `
+
+open -n /Applications/Google\ Chrome.app/ --args --disable-web-security --user-data-dir=/Users/yangxiaoyan/MyChromeDevUserData/
