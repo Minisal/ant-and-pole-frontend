@@ -7,4 +7,5 @@ Terminal >
 `open -n /Applications/Google\ Chrome.app/ --args --disable-web-security  --user-data-dir=/Users/yourname/MyChromeDevUserData/`
 
 coding 进度
-/Users/yangxiaoyan/Desktop/file/project/git-repo/ant-and-pole-frontend/ant-and-pole.png
+
+![Alt text](https://github.com/minisal/ant-and-pole-frontend/raw/master/ant-and-pole.png)
