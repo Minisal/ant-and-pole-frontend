@@ -416,6 +416,128 @@ hr {
   color: #58D1FF;
 }
 
+.pole{
+  display: block;
+  width: 442px;
+  background: none;
+  border: none;
+  font-size: 1em;
+  color: white;
+  padding: 0.8em 0;
+  border-radius: 3em;
+  margin: 0 auto 0.9em;
+  font-weight: 300;
+  border: 2px solid white;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+.pole-blue {
+  border-color: #58D1FF;
+  font-weight: 600;
+}
+
+.ant-of-max {
+  height:42px;
+  width:42px;
+  position:absolute;
+}
+
+
+.ant-of-min {
+  height:42px;
+  width:42px;
+  position:absolute;
+}
+
+.ant-data-input-big {
+  display: block;
+  width: 100%;
+  background: none;
+  border: none;
+  font-size: 1em;
+  color: white;
+  caret-color:white;
+  padding: 0.6em 0;
+  border-radius: 3em;
+  margin: 0 auto 0.9em;
+  font-weight: 300;
+  border: 2px solid white;
+  text-align:center;
+}
+
+.ant-data-input {
+  width: 25%;
+  background: none;
+  border: none;
+  font-size: 1em;
+  color: white;
+  caret-color:white;
+  padding: 0.4em 0;
+  border-radius: 3em;
+  margin: 0 auto 0.9em;
+  font-weight: 300;
+  border: 2px solid white;
+  text-align:center;
+}
+
+
+.input-blue {
+  border-color: #58D1FF;
+  font-weight: 600;
+}
+
+
+label{
+  line-height: 20px;
+  display: inline-block;
+  margin-left: 5px;
+  margin-right:15px;
+  color: white;
+}
+.direction-radio{
+  width: 20px;
+  height: 20px;
+  appearance: none;
+  position: relative;
+}
+.direction-radio:before{
+  content: '';
+  width: 20px;
+  height: 20px;
+  border: 1px solid #7d7d7d;
+  display: inline-block;
+  border-radius: 50%;
+  vertical-align: middle;
+}
+.direction-radio:checked:before{
+  content: '';
+  width: 20px;
+  height: 20px;
+  border: 1px solid #c59c5a;
+  background:#c59c5a;
+  display: inline-block;
+  border-radius: 50%;
+  vertical-align: middle;
+}
+.direction-radio:checked:after{
+  content: '';
+  width: 10px;
+  height:5px;
+  border: 2px solid white;
+  border-top: transparent;
+  border-right: transparent;
+  text-align: center;
+  display: block;
+  position: absolute;
+  top: 6px;
+  left:5px;
+  vertical-align: middle;
+  transform: rotate(-45deg);
+}
+.direction-radio:checked+label{
+  color: rgba(11, 29, 49, 1);
+}
+
 .gm-btn {
   display: block;
   width: 100%;

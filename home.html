@@ -84,24 +84,22 @@
           <div class="tpbl-circle c-blue gm-menu-logo-bg"></div>
         </div>
         <form name="formCustomMode" action="" >杆长 :
-          <br />
-          <input id="poleLength" type="text" class="form-control"/>cm
+          <br/>
+          <input id="poleLength" type="text" class="ant-data-input-big"/>cm
           <br />蚂蚁个数 :
           <br />
-          <input id="antNum" type="text" class="form-control"/>只
+          <input id="antNum" type="text" class="ant-data-input-big input-blue"/>只
           <br />
           <br />
           <div id="NextStep1Btn" class="tpbl-circle c-white submit-circle"></div></form>
       </div>
     </div>
+
     <!-- POSITION SETTING PAGE -->
     <div id="pagePositionSetting" class="page-cont page-game-menu page-faded-bg">
       <div class="fixed-75w-wrapper">
-        <div class="gm-menu-header-cont">
-          <div class="tpbl-circle c-blue gm-menu-logo-bg"></div>
-        </div>
         <form name="formPositionSetting" action="">
-          <ul class="ulPositionSetting" id="positionSetting"></ul>
+          <ul class="position-setting" id="PositionSetting"></ul>
           <div id="NextStep2Btn" class="tpbl-circle c-white submit-circle"></div>
         </form>
       </div>
@@ -110,13 +108,9 @@
     <!-- DIRECTION SETTING PAGE -->
     <div id="pageDirectionSetting" class="page-cont page-game-menu page-faded-bg">
       <div class="fixed-75w-wrapper">
-        <div class="gm-menu-header-cont">
-          <div class="tpbl-circle c-blue gm-menu-logo-bg"></div>
+        <div class="direction-radio" id="DirectionRadio">
         </div>
-        <form action="" name="formDirectionSetting">
-          <ul id="ulDirectionSetting"></ul>
-          <div id="ShowBtn" class="tpbl-circle c-white submit-circle"></div>
-        </form>
+        <div id="ShowBtn" class="tpbl-circle c-white submit-circle"></div>
       </div>
     </div>
 
@@ -125,15 +119,20 @@
     <div id="pageMaxAndMinTime" class="page-cont page-game-menu page-faded-bg">
       <div class="fixed-75w-wrapper">
         <div class="gm-menu-header-cont">
-          <br>最长用时动画
-          <div class="MaxTime" id="MaxTime"></div><br>
-          <img class="pole" src="images/pole.png" style="height:80px;width:400px;">
-          <br>最短用时动画
-          <div class="MinTime" id="MinTime"></div><br>
-          <img class="pole" src="images/pole.png" style="height:80px;width:400px;">
+          <div class="max-time-title" id="MaxTimeTitle">
+            <br>max time:<br>
+          </div>
 
-        	<ul id="ulMaxAndMinTime"></ul>  
-
+          <div class="div-max-time" id="MaxTime" ></div>
+          <div class="pole" ></div>
+          <br><br>
+          <div class="min-time-title" id="MinTimeTitle">
+            <br>min time:<br>
+          </div>
+          <div class="div-min-time" id="MinTime"></div>
+          <img class="pole pole-blue">
+        	<ul id="ulMaxAndMinTime"></ul>
+          <br><br><br>
           <div id="mmatPageBackBtn" class="tpbl-circle c-white submit-circle"></div>
         </div>
       </div>

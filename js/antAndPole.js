@@ -93,6 +93,8 @@ var minTimeState;
 var customTimeState;
 
 var dataPreparedFlag = true;
+var antImageSize = 38;
+var antImageDeviation = 20; // and image's size / 2
 
 
 // ===============================================================
@@ -205,12 +207,7 @@ StartBtn.addEventListener('click', function() {
     success:function(result){
       console.log('clear success');
       dataPreparedFlag = false;
-    },
-    error:function(xhr,textStatus){  
-      alert('error', xhr.responseText);
-      console.log(xhr);
-      console.log(textStatus);  
-    }  
+    }
   });      
 
   toolsBox.showPage(pageModeSetting);
@@ -244,12 +241,7 @@ StandardModeBtn.addEventListener('click', function() {
     },
     success:function(result){
       console.log('init pole success'+poleLength);
-    },
-    error:function(xhr,textStatus){  
-      alert('error', xhr.responseText);
-      console.log(xhr);
-      console.log(textStatus);  
-    }  
+    }
   });
 
   for(var i=0; i<antNum; i++){
@@ -288,20 +280,68 @@ function selectDirection(i,direction){
 DirectionSettingBtn.addEventListener('click', function() {
   audioPool.playSound(buttonTap);
 
-  var div = document.getElementById("ulDirectionSetting");  
-  while (div.hasChildNodes()){ 
-    div.removeChild(div.firstChild); }
+  var parent = document.getElementById("DirectionRadio");
 
-  toolsBox.hidePage(pageStandardMode);
+  while (parent.hasChildNodes()){
+    parent.removeChild(parent.firstChild); }
+
   for(var i=0; i<antNum; i++){
-    $('ul').append(
-          '<form>蚂蚁'+i+'方向 :'+
-          '<input type="radio" name="direction" '+
-          'onclick="selectDirection('+i+',this.value)" value="-1" checked>左 '+
-          '<input type="radio" name="direction" '+
-          'onclick="selectDirection('+i+',this.value)" value="1">右</form>'
-          )
+
+    var directionRadioElement = document.createElement("form");
+    var antLeftElement = document.createElement('input');
+    var antRightElement = document.createElement('input');
+    var antLeftLabel = document.createElement('label');
+    var antRightLabel = document.createElement('label');
+
+    directionRadioElement.setAttribute('id','DirectionForm'+i);
+
+
+    antLeftElement.setAttribute('type','radio');
+    antLeftElement.setAttribute('name',"ant"+i+"Left");
+    antLeftElement.setAttribute('onclick',"selectDirection"+i+",this.value");
+    antLeftElement.setAttribute('value',-1);
+    antLeftElement.setAttribute('id',"Left"+i);
+
+
+    antRightElement.setAttribute('type','radio');
+    antRightElement.setAttribute('name',"ant"+i+"Right");
+    antRightElement.setAttribute('onclick',"selectDirection"+i+",this.value");
+    antRightElement.setAttribute('value',1);
+    antRightElement.setAttribute('id',"Right"+i);
+
+    antLeftLabel.setAttribute('for',"Left"+i);
+    antLeftLabel.setAttribute('id','radio-Left-label'+i);
+
+
+    antRightLabel.setAttribute('for',"Right"+i);
+    antRightLabel.setAttribute('id','radio-Right-label'+i);
+
+
+
+
+
+    parent.appendChild(directionRadioElement);
+    var directionRadio = document.getElementById('DirectionForm'+i);
+    console.log(directionRadio.appendChild(antLeftElement));
+    directionRadio.appendChild(antLeftElement);
+    console.log(directionRadio);
+    directionRadio.appendChild(antLeftLabel);
+    directionRadio.appendChild(antRightElement);
+    directionRadio.appendChild(antRightLabel);
+    console.log(directionRadio);
+
+
+    document.getElementById('DirectionForm'+i).innerHTML="蚂蚁 "+i+" 方向 : ";
+    console.log(document.getElementById("Left"+i))
+    document.getElementById('Left'+i).checked=true;
+
+
+    document.getElementById("Right"+i).checked=false;
+    document.getElementById('radio-Left-label'+i).innerHTML="Left";
+    document.getElementById('radio-Right-label'+i).innerHTML="Right";
+
   };
+  toolsBox.hidePage(pageStandardMode);
   toolsBox.showPage(pageDirectionSetting);
 }, false);
 
@@ -321,12 +361,12 @@ MaxAndMinTimeBtn.addEventListener('click', function() {
         type : "post",
         success:function(result){
           minTime = result;
-          console.log('minTime:'+minTime);
+          document.getElementById("MinTimeTitle").innerHTML="Min Time:   "+minTime;
         }
       });
     }
   });
-  toolsBox.sleep(1000);
+  toolsBox.sleep(100);
   console.log("get max");
   $.ajax({
     url : "http://47.100.30.181:8080/getMaxTimeState",
@@ -339,35 +379,47 @@ MaxAndMinTimeBtn.addEventListener('click', function() {
         type : "post",
         success:function(result){
           maxTime = result;
-          console.log('maxTime:'+maxTime);
+          document.getElementById("MaxTimeTitle").innerHTML="Max Time:   "+maxTime;
         }
       });
     }
   });
   toolsBox.sleep(1000);
 
-  var MaxTime = document.getElementById("MaxTime");
-  var MinTime = document.getElementById("MinTime");
-  while (MaxTime.hasChildNodes()){
-    MaxTime.removeChild(MaxTime.firstChild);
-    MinTime.removeChild(MinTime.firstChild);
+  var MaxTimeElement = document.getElementById("MaxTime");
+  var MinTimeElement = document.getElementById("MinTime");
+
+  while (MaxTimeElement.hasChildNodes()){ // Remove previous ants
+    MaxTimeElement.removeChild(MaxTimeElement.firstChild);
+    MinTimeElement.removeChild(MinTimeElement.firstChild);
+  }
+
+  for(var i=0; i<antNum; i++){
+    position = ants[i][0]/poleLength*400;
+    position += antImageDeviation; // Correct picture deviation
+
+    var antOfMaxElement = document.createElement('img');
+    var antOfMinElement = document.createElement('img');
+    var antImageSource = "images/ant"+i%15+".png";
+
+    antOfMaxElement.setAttribute('class','ant-of-max'+i);
+    antOfMaxElement.setAttribute('src',antImageSource);
+    antOfMaxElement.setAttribute('alt','ant');
+    antOfMaxElement.setAttribute('style',"left:"+position+"px;"+
+        "height:"+antImageSize+"px;width:"+antImageSize+"px;position:absolute;");
+
+    antOfMinElement.setAttribute('class','ant-of-min'+i);
+    antOfMinElement.setAttribute('src',antImageSource);
+    antOfMinElement.setAttribute('alt','ant');
+    antOfMinElement.setAttribute('style',"left:"+position+"px;"+
+        "height:"+antImageSize+"px;width:"+antImageSize+"px;position:absolute;");
+
+    MaxTimeElement.appendChild(antOfMaxElement);
+    MinTimeElement.appendChild(antOfMinElement);
   }
 
   toolsBox.hidePage(pageStandardMode);
   toolsBox.showPage(pageMaxAndMinTime);
-
-  for(var i=0; i<antNum; i++){
-    $(".MaxTime").append(
-        '<img class = "antOfMax'+i+'" src="images/ant'+i%15+'.png"'+
-        'alt="Ant" style="left:'+ants[i][0]/poleLength*400+'px;'+
-        'height:40px;width:40px;position:absolute;">'
-    );
-    $(".MinTime").append(
-        '<img class = "antOfMin'+i+'" src="images/ant'+i%15+'.png"'+
-        'alt="Ant" style="left:'+ants[i][0]/poleLength*400+'px;'+
-        'height:42px;width:42px;position:absolute;">'
-    )
-  }
 
 }, false);
 
@@ -404,40 +456,48 @@ NextStep1Btn.addEventListener('click', function() {
     },
     success:function(result){
       console.log('init pole success');
-    },
-    error:function(xhr,textStatus){  
-      alert('error', xhr.responseText);
-      console.log(xhr);
-      console.log(textStatus);  
-    }  
+    }
   });    
 
   
-  toolsBox.hidePage(pageCustomMode);
-  var ul = document.getElementById("positionSetting");
-  while (ul.hasChildNodes()){
-    ul.removeChild(div.firstChild); }
+
+  var PositionSettingInputElement = document.getElementById("PositionSetting");
+  while (PositionSettingInputElement.hasChildNodes()){
+    PositionSettingInputElement.removeChild(PositionSettingInputElement.firstChild); }
   for(var i=0; i<antNum; i++){
-    if(ants[i]){
-      $('ulPositionSetting').append(
-          '蚂蚁'+i+'位置 :'+
-          '<input type="text" value="'+ants[i][0]+'" oninput="inputPosition('+i+',this.value)" class="form-control"> cm'+
-          '速度 :'+
-          '<input type="text" value="'+ants[i][1]+'" oninput="inputSpeed('+i+',this.value)"id="speed'+i+'" class="form-control"> cm/s'+
-          '<br>')
-    }else{
-      $('ulPositionSetting').append(
-          '蚂蚁'+i+'位置 :'+
-          '<input type="text" value="0" oninput="inputPosition('+i+',this.value)" class="form-control"> cm'+
-          '速度 :'+
-          '<input type="text" value="0" oninput="inputSpeed('+i+',this.value)"id="speed'+i+'" class="form-control"> cm/s'+
-          '<br>')
-    }
+
+    var antPositionElement = document.createElement('input');
+    var antSpeedElement = document.createElement('input');
+
+    antPositionElement.setAttribute('type','text');
+    antPositionElement.setAttribute('oninput',"inputPosition("+i+",this.value)");
+    antPositionElement.setAttribute('class','ant-data-input');
+    if(ants[i])
+      antPositionElement.setAttribute('value',ants[i][0]);
+    else
+      antPositionElement.setAttribute('value',0);
+
+    antSpeedElement.setAttribute('type','text');
+    antSpeedElement.setAttribute('oninput',"inputPosition("+i+",this.value)");
+    antSpeedElement.setAttribute('id',"speed"+i);
+    antSpeedElement.setAttribute('class','ant-data-input');
+    if(ants[i])
+      antSpeedElement.setAttribute('value',ants[i][1]);
+    else
+      antSpeedElement.setAttribute('value',0);
+    $('.position-setting').append('蚂蚁 '+i+' 位置 : ');
+    PositionSettingInputElement.appendChild(antPositionElement);
+    $('.position-setting').append('   速度 : ');
+    PositionSettingInputElement.appendChild(antSpeedElement);
+    $('.position-setting').append('<br>');
     
   };
+  toolsBox.hidePage(pageCustomMode);
   toolsBox.showPage(pagePositionSetting);
 
 }, false);
+
+
   
 // Position Setting Buttons
 // -- Next Step2 Button
@@ -446,6 +506,7 @@ NextStep2Btn.addEventListener('click', function() {
   var count = 0;
   for(var i=0; i<antNum; i++){
     toolsBox.sleep(100);
+    if (ants[i][0]>poleLength) ants[i][0]=poleLength;
     $.ajax({  
       url : "http://47.100.30.181:8080/addAnt", 
       type : "post",  
@@ -481,12 +542,7 @@ ShowBtn.addEventListener('click', function() {
       },
       success:function(result){
         console.log('set deriction success'+i);
-      },
-      error:function(xhr,textStatus){  
-        alert('error'+i, xhr.responseText);
-        console.log(xhr);
-        console.log(textStatus);  
-      }  
+      }
     }); 
   };
 
@@ -497,11 +553,7 @@ ShowBtn.addEventListener('click', function() {
       customTimeState=JSON.parse(result);
       console.log(customTimeState);
       console.log(result);
-    },
-    error:function(xhr,textStatus){  
-      alert('error', xhr.responseText);
-      console.log('error'+i+xhr+textStatus);
-    }  
+    }
   }); 
 
 
@@ -512,12 +564,7 @@ ShowBtn.addEventListener('click', function() {
         console.log('get time success');
         customTime = result;
         console.log(customTime);
-      },
-      error:function(xhr,textStatus){  
-        alert('error', xhr.responseText);
-        console.log(xhr);
-        console.log(textStatus);  
-      }  
+      }
   }); 
 
   toolsBox.hidePage(pageDirectionSetting);
@@ -536,58 +583,45 @@ mmatPageBackBtn.addEventListener('click', function() {
     //animation
     var lastOrder = new Array();
     for(var i in minTimeState){
-
       for(var id=0; id<antNum; id++) {
-
         for (var j in minTimeState[i]) {
           if(i == 0 && minTimeState[i][j].id==id){
             lastOrder[id]=j;
-     //       console.log("last order["+id+"]="+j);
           }
           if (i > 0 && minTimeState[i][j].id==id) {
-      //      console.log(i-1+":"+id+":"+lastOrder[id]);
-      //      console.log(minTimeState[i - 1][lastOrder[id]]);
-
-            var moveDistance = minTimeState[i][j].location - minTimeState[i - 1][lastOrder[id]].location;
+            var moveDistance = minTimeState[i][j].location - minTimeState[i-1][lastOrder[id]].location;
             lastOrder[id]=j;
-            //            console.log("last order["+id+"]="+j);
             moveDistance = moveDistance > 0 ? moveDistance : -moveDistance;
             var moveTime = moveDistance / minTimeState[i][j].speed;
-            var position = minTimeState[i][j].location * 400 / poleLength;
-            //   console.log("state" + i + " ant" + id + ":" + moveDistance+","+moveTime);
-            $(".antOfMin" + minTimeState[i][j].id).animate(
-                {left: position + 'px'}, moveTime*200,"linear");
+            var htmlPosition = minTimeState[i][j].location * 400 / poleLength;
+            htmlPosition += antImageDeviation; // Correct picture deviation
+            $(".ant-of-min" + minTimeState[i][j].id).animate(
+                {left: htmlPosition+ 'px'}, moveTime*200, "linear");
           }
         }
       }
     }
 
     for(var i in maxTimeState){ // i state
-      for(var id=0; id<antNum; id++) {
-
+      for(var id=0; id<antNum; id++) { // id ant
         for (var j in maxTimeState[i]) { // j live ant
-          if( i == 0&& minTimeState[i][j].id==id) lastOrder[id] =j;
-          //      console.log("last order["+id+"]="+j);
+          if( i == 0&& minTimeState[i][j].id==id)
+            lastOrder[id] =j;
           if (i > 0 && maxTimeState[i][j].id==id) {
-            var moveDistance = maxTimeState[i][j].location - maxTimeState[i - 1][lastOrder[id]].location;
+            var moveDistance = maxTimeState[i][j].location - maxTimeState[i-1][lastOrder[id]].location;
             lastOrder[id] = j;
-            //          console.log("last order["+id+"]="+j);
             moveDistance = moveDistance > 0 ? moveDistance : -moveDistance;
             var moveTime = moveDistance / maxTimeState[i][j].speed;
-            var position = maxTimeState[i][j].location * 400 / poleLength;
-            //          console.log("state" + i + " ant" + id + ":" + moveDistance+","+moveTime);
-            $(".antOfMax" + maxTimeState[i][j].id).animate(
-                {left: position + 'px'}, moveTime*200,"linear");
+            var htmlPosition = maxTimeState[i][j].location * 400 / poleLength;
+            htmlPosition += antImageDeviation; // Correct picture deviation
+            $(".ant-of-max" + maxTimeState[i][j].id).animate(
+                {left: htmlPosition + 'px'}, moveTime*200,"linear");
           }
-
         }
       }
     }
-
-
-
-
   }
+
   if(pageClick1%2==1){
     // back to home
     poleLength = 300;
@@ -607,7 +641,6 @@ mmatPageBackBtn.addEventListener('click', function() {
 
     toolsBox.showPage(pageHome);
     toolsBox.hidePage(pageMaxAndMinTime);
-
   }
 
   pageClick1++;
