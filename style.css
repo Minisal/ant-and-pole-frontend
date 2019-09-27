@@ -28,7 +28,7 @@ body{
   background: #0B1D31;
   color: white;
   overflow: hidden; /* always hide scrollbars */
-  text-transform: uppercase;
+
   text-align: center;
 }
 
@@ -495,26 +495,29 @@ label{
   color: white;
 }
 .direction-radio{
-  width: 20px;
-  height: 20px;
+  width: 24px;
+  height: 2px;
   appearance: none;
   position: relative;
+  top:-15px;
 }
 .direction-radio:before{
   content: '';
-  width: 20px;
-  height: 20px;
+  width: 22px;
+  height: 22px;
   border: 1px solid #7d7d7d;
   display: inline-block;
   border-radius: 50%;
   vertical-align: middle;
+  left:1px;
+  top:1px;
 }
 .direction-radio:checked:before{
   content: '';
   width: 20px;
   height: 20px;
-  border: 1px solid #c59c5a;
-  background:#c59c5a;
+  border: 1px solid #58D1FF;
+  background:#58D1FF;
   display: inline-block;
   border-radius: 50%;
   vertical-align: middle;
@@ -535,7 +538,7 @@ label{
   transform: rotate(-45deg);
 }
 .direction-radio:checked+label{
-  color: rgba(11, 29, 49, 1);
+  color: #58D1FF
 }
 
 .gm-btn {

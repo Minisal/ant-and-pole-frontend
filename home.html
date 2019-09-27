@@ -63,8 +63,8 @@
         <div class="gm-menu-header-cont">
           <div class="tpbl-circle c-blue gm-menu-logo-bg"></div>
         </div>
-        <button id="StandardModeBtn" class="gm-btn btn-blue" type="button" name="button">标准模式</button>
-        <button id="CustomModeBtn" class="gm-btn" type="button" name="button">自定义模式</button></div>
+        <button id="StandardModeBtn" class="gm-btn btn-blue" type="button" name="button">standard mode</button>
+        <button id="CustomModeBtn" class="gm-btn" type="button" name="button">custom mode</button></div>
     </div>
 
     <!-- STANDARD MODE PAGE -->
@@ -73,8 +73,8 @@
         <div class="gm-menu-header-cont">
           <div class="tpbl-circle c-blue gm-menu-logo-bg"></div>
         </div>
-        <button id="MaxAndMinTimeBtn" class="gm-btn btn-blue" type="button" name="button">查看用时最长和最短动画</button>
-        <button id="DirectionSettingBtn" class="gm-btn" type="button" name="button">自定义蚂蚁起始方向</button>
+        <button id="MaxAndMinTimeBtn" class="gm-btn btn-blue" type="button" name="button">max and min animation</button>
+        <button id="DirectionSettingBtn" class="gm-btn" type="button" name="button">setting direction</button>
         </div>
     </div>
     <!-- CUSTOM MODE PAGE -->
@@ -83,14 +83,14 @@
         <div class="gm-menu-header-cont">
           <div class="tpbl-circle c-blue gm-menu-logo-bg"></div>
         </div>
-        <form name="formCustomMode" action="" >杆长 :
-          <br/>
-          <input id="poleLength" type="text" class="ant-data-input-big"/>cm
-          <br />蚂蚁个数 :
-          <br />
-          <input id="antNum" type="text" class="ant-data-input-big input-blue"/>只
-          <br />
-          <br />
+        <form name="formCustomMode" action="" >pole length
+          </br>
+          <input id="poleLength" type="text" class="ant-data-input-big"/>
+          ant number
+          </br >
+          <input id="antNum" type="text" class="ant-data-input-big input-blue"/>
+          </br>
+          </br>
           <div id="NextStep1Btn" class="tpbl-circle c-white submit-circle"></div></form>
       </div>
     </div>
@@ -108,8 +108,8 @@
     <!-- DIRECTION SETTING PAGE -->
     <div id="pageDirectionSetting" class="page-cont page-game-menu page-faded-bg">
       <div class="fixed-75w-wrapper">
-        <div class="direction-radio" id="DirectionRadio">
-        </div>
+        <div id="DirectionRadio">
+        </div></br></br>
         <div id="ShowBtn" class="tpbl-circle c-white submit-circle"></div>
       </div>
     </div>
@@ -120,19 +120,20 @@
       <div class="fixed-75w-wrapper">
         <div class="gm-menu-header-cont">
           <div class="max-time-title" id="MaxTimeTitle">
-            <br>max time:<br>
+            </br></br>
+            </br>max time:</br>
           </div>
 
           <div class="div-max-time" id="MaxTime" ></div>
           <div class="pole" ></div>
-          <br><br>
+          </br></br>
           <div class="min-time-title" id="MinTimeTitle">
-            <br>min time:<br>
+            </br>min time:</br>
           </div>
           <div class="div-min-time" id="MinTime"></div>
           <img class="pole pole-blue">
         	<ul id="ulMaxAndMinTime"></ul>
-          <br><br><br>
+          </br></br>
           <div id="mmatPageBackBtn" class="tpbl-circle c-white submit-circle"></div>
         </div>
       </div>
@@ -142,8 +143,11 @@
     <div id="pageTotalTime" class="page-cont page-game-menu page-faded-bg">
       <div class="fixed-75w-wrapper">
         <div class="gm-menu-header-cont">
-        	固定方向动画
-        	<ul id="ulTotalTime"></ul>
+          <div class="max-time-title" id="TotalTimeTitle">
+            </br></br></br>
+          </div>
+          <div class="div-max-time" id="TotalTime" ></div>
+          <div class="pole" ></div></br></br>
           <div id="ttPageBackBtn" class="tpbl-circle c-white submit-circle"></div>
         </div>
       </div>
