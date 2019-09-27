@@ -52,8 +52,6 @@ var pageDirectionSetting = document.querySelector('#pageDirectionSetting');
 // --
 var ShowBtn = document.querySelector('#ShowBtn');
 
-
-
 // Max And Min Time Page
 var pageMaxAndMinTime = document.querySelector('#pageMaxAndMinTime');
 // --
@@ -66,8 +64,8 @@ var ttPageBackBtn = document.querySelector('#ttPageBackBtn');
 
 
 var pagesArray = [
-  pageSplash, pageHome, pageAbout, pageModeSetting, 
-  pageCustomMode, pagePositionSetting, pageDirectionSetting, 
+  pageSplash, pageHome, pageAbout, pageModeSetting,
+  pageCustomMode, pagePositionSetting, pageDirectionSetting,
   pageMaxAndMinTime, pageTotalTime
 ];
 
@@ -84,7 +82,7 @@ var ants = [ // position, speed, direction
   [110, 5, -1],
   [160, 5, -1],
   [250, 5, -1]
-]; 
+];
 var maxTime = 0;
 var minTime = 0;
 var customTime = 0;
@@ -129,7 +127,7 @@ toolsBox = {
     height: window.innerHeight || document.body.clientHeight
   },
   sleep: function(d){
-  for(var t = Date.now();Date.now() - t <= d;);
+    for(var t = Date.now();Date.now() - t <= d;);
   }
 }
 
@@ -184,10 +182,6 @@ var audioPool = {
   playSound: function(soundName) {
     soundName.audioPlayer.currentTime = 0;
     soundName.audioPlayer.play();
-  },
-  stopSound: function(soundName) {
-    soundName.audioPlayer.pause();
-    soundName.audioPlayer.currentTime = 0;
   }
 }
 
@@ -201,14 +195,14 @@ audioPool.addSounds(); // Add sounds to the page in separate audio players
 StartBtn.addEventListener('click', function() {
   audioPool.playSound(buttonTap);
 
-  $.ajax({  
-    url : "http://47.100.30.181:8080/clear", 
-    type : "post",  
+  $.ajax({
+    url : "http://47.100.30.181:8080/clear",
+    type : "post",
     success:function(result){
       console.log('clear success');
       dataPreparedFlag = false;
     }
-  });      
+  });
 
   toolsBox.showPage(pageModeSetting);
   toolsBox.hidePage(pageHome);
@@ -233,9 +227,9 @@ abtPageBackBtn.addEventListener('click', function() {
 StandardModeBtn.addEventListener('click', function() {
   audioPool.playSound(buttonTap);
 
-  $.ajax({  
-    url : "http://47.100.30.181:8080/initPole", 
-    type : "post",  
+  $.ajax({
+    url : "http://47.100.30.181:8080/initPole",
+    type : "post",
     data:{
       length: poleLength
     },
@@ -248,8 +242,8 @@ StandardModeBtn.addEventListener('click', function() {
     var count = 0; // count success ajax
     toolsBox.sleep(100); // Prevents the backend incorrectly receiving only one ajax request
     $.ajax({
-      url : "http://47.100.30.181:8080/addAnt", 
-      type : "post",  
+      url : "http://47.100.30.181:8080/addAnt",
+      type : "post",
       data:{
         location:ants[i][0],
         speed:ants[i][1]
@@ -281,13 +275,10 @@ DirectionSettingBtn.addEventListener('click', function() {
   audioPool.playSound(buttonTap);
 
   var parent = document.getElementById("DirectionRadio");
+  while (parent.hasChildNodes()){ parent.removeChild(parent.firstChild); }
 
-  while (parent.hasChildNodes()){
-    parent.removeChild(parent.firstChild); }
-
-  for(var i=0; i<antNum; i++){
-
-
+  for(var i=0; i<antNum; i++)
+  {
     var antText = document.createElement('text');
     var antLeftElement = document.createElement('input');
     var antRightElement = document.createElement('input');
@@ -322,12 +313,9 @@ DirectionSettingBtn.addEventListener('click', function() {
     parent.appendChild(antRightElement);
     parent.appendChild(antRightLabel);
 
-
     document.getElementById('directionText'+i).innerHTML="<br>ant "+i+" direction     ";
-
     document.getElementById('radio-Left-label'+i).innerHTML="Left";
     document.getElementById('radio-Right-label'+i).innerHTML="Right";
-
   };
   toolsBox.hidePage(pageStandardMode);
   toolsBox.showPage(pageDirectionSetting);
@@ -336,8 +324,8 @@ DirectionSettingBtn.addEventListener('click', function() {
 // -- Max And Min Time Button
 MaxAndMinTimeBtn.addEventListener('click', function() {
   audioPool.playSound(buttonTap);
-
   console.log("get min");
+
   $.ajax({
     url : "http://47.100.30.181:8080/getMinTimeState",
     type : "post",
@@ -355,6 +343,7 @@ MaxAndMinTimeBtn.addEventListener('click', function() {
     }
   });
   toolsBox.sleep(100);
+
   console.log("get max");
   $.ajax({
     url : "http://47.100.30.181:8080/getMaxTimeState",
@@ -409,90 +398,73 @@ MaxAndMinTimeBtn.addEventListener('click', function() {
   toolsBox.sleep(100);
   toolsBox.hidePage(pageStandardMode);
   toolsBox.showPage(pageMaxAndMinTime);
-
 }, false);
-
-
 
 
 // Custom Mode Page Buttons
 // -- Next Step1 Button
 function inputPosition(i,position){
-  if(ants[i])
-    ants[i][0]=position;
-  else
-    ants.push([position,0,-1])
+  if(ants[i]) ants[i][0]=position;
+  else ants.push([position,0,-1])
 };
 function inputSpeed(i,speed){
-  if(ants[i])
-    ants[i][1]=speed;
-  else
-    ants.push([0,speed,-1]);
-
+  if(ants[i]) ants[i][1]=speed;
+  else ants.push([0,speed,-1]);
 };
 NextStep1Btn.addEventListener('click', function() {
   audioPool.playSound(buttonTap);
   poleLength = document.getElementById("poleLength").value;
   antNum = document.getElementById("antNum").value;
 
-  if (poleLength==null||poleLength=="" || antNum==null||antNum=="")
-  {
+  if (poleLength==null||poleLength=="" || antNum==null||antNum=="") {
     alert("Please input data!");
     return false;
   };
 
-  $.ajax({  
-    url : "http://47.100.30.181:8080/initPole", 
-    type : "post",  
+  $.ajax({
+    url : "http://47.100.30.181:8080/initPole",
+    type : "post",
     data:{
       length:poleLength
     },
     success:function(result){
       console.log('init pole success');
     }
-  });    
-
-  
+  });
 
   var PositionSettingInputElement = document.getElementById("PositionSetting");
   while (PositionSettingInputElement.hasChildNodes()){
     PositionSettingInputElement.removeChild(PositionSettingInputElement.firstChild); }
-  for(var i=0; i<antNum; i++){
-
+  for(var i=0; i<antNum; i++)
+  {
     var antPositionElement = document.createElement('input');
     var antSpeedElement = document.createElement('input');
 
     antPositionElement.setAttribute('type','text');
     antPositionElement.setAttribute('oninput',"inputPosition("+i+",this.value)");
     antPositionElement.setAttribute('class','ant-data-input');
-    if(ants[i])
-      antPositionElement.setAttribute('value',ants[i][0]);
-    else
-      antPositionElement.setAttribute('value',0);
+    if(ants[i]) antPositionElement.setAttribute('value',ants[i][0]);
+    else antPositionElement.setAttribute('value',0);
 
     antSpeedElement.setAttribute('type','text');
     antSpeedElement.setAttribute('oninput',"inputSpeed("+i+",this.value)");
     antSpeedElement.setAttribute('id',"speed"+i);
     antSpeedElement.setAttribute('class','ant-data-input');
-    if(ants[i])
-      antSpeedElement.setAttribute('value',ants[i][1]);
-    else
-      antSpeedElement.setAttribute('value',0);
+    if(ants[i]) antSpeedElement.setAttribute('value',ants[i][1]);
+    else antSpeedElement.setAttribute('value',0);
+
     $('.position-setting').append('ant '+i+' position  ');
     PositionSettingInputElement.appendChild(antPositionElement);
     $('.position-setting').append('    speed  ');
     PositionSettingInputElement.appendChild(antSpeedElement);
     $('.position-setting').append('<br>');
-    
   };
 
   toolsBox.hidePage(pageCustomMode);
   toolsBox.showPage(pagePositionSetting);
-
 }, false);
 
 
-  
 // Position Setting Buttons
 // -- Next Step2 Button
 NextStep2Btn.addEventListener('click', function() {
@@ -518,9 +490,9 @@ NextStep2Btn.addEventListener('click', function() {
     else
       ants.push([0,0,-1]);
 
-    $.ajax({  
-      url : "http://47.100.30.181:8080/addAnt", 
-      type : "post",  
+    $.ajax({
+      url : "http://47.100.30.181:8080/addAnt",
+      type : "post",
       data:{
         location:ants[i][0],
         speed:ants[i][1]
@@ -534,9 +506,7 @@ NextStep2Btn.addEventListener('click', function() {
         }
       }
     });
-  };
-
-  
+  }
 }, false);
 
 // Direction Setting Buttons
@@ -546,9 +516,9 @@ ShowBtn.addEventListener('click', function() {
   var count=0;
   for(var i=0; i<antNum; i++){
     toolsBox.sleep(50);
-    $.ajax({  
-      url : "http://47.100.30.181:8080/setDirection", 
-      type : "post",  
+    $.ajax({
+      url : "http://47.100.30.181:8080/setDirection",
+      type : "post",
       data:{
         direction:ants[i][2],
         id:i
@@ -575,13 +545,11 @@ ShowBtn.addEventListener('click', function() {
           });
         }
       }
-    }); 
-  };
+    });
+  }
 
   var parent = document.getElementById("TotalTime");
-  while(parent.hasChildNodes()){
-    parent.removeChild(parent.firstChild);
-  }
+  while(parent.hasChildNodes()){ parent.removeChild(parent.firstChild);}
 
   for(var i=0; i<antNum; i++){
     position = ants[i][0]/poleLength*400;
@@ -600,12 +568,8 @@ ShowBtn.addEventListener('click', function() {
     parent.appendChild(antElement);
   }
 
-
-
-
   toolsBox.hidePage(pageDirectionSetting);
   toolsBox.showPage(pageTotalTime);
-
 }, false);
 
 
@@ -621,10 +585,10 @@ mmatPageBackBtn.addEventListener('click', function() {
     for(var i in minTimeState){
       for(var id=0; id<antNum; id++) {
         for (var j in minTimeState[i]) {
-          if(i == 0 && minTimeState[i][j].id==id){
+          if(i==0 && minTimeState[i][j].id==id){
             lastOrder[id]=j;
           }
-          if (i > 0 && minTimeState[i][j].id==id) {
+          if (i>0 && minTimeState[i][j].id==id) {
             var moveDistance = minTimeState[i][j].location - minTimeState[i-1][lastOrder[id]].location;
             lastOrder[id]=j;
             moveDistance = moveDistance > 0 ? moveDistance : -moveDistance;
@@ -641,9 +605,9 @@ mmatPageBackBtn.addEventListener('click', function() {
     for(var i in maxTimeState){ // i state
       for(var id=0; id<antNum; id++) { // id ant
         for (var j in maxTimeState[i]) { // j live ant
-          if( i == 0&& minTimeState[i][j].id==id)
+          if( i==0&& minTimeState[i][j].id==id)
             lastOrder[id] =j;
-          if (i > 0 && maxTimeState[i][j].id==id) {
+          if (i>0 && maxTimeState[i][j].id==id) {
             var moveDistance = maxTimeState[i][j].location - maxTimeState[i-1][lastOrder[id]].location;
             lastOrder[id] = j;
             moveDistance = moveDistance > 0 ? moveDistance : -moveDistance;
@@ -678,7 +642,6 @@ mmatPageBackBtn.addEventListener('click', function() {
     toolsBox.showPage(pageHome);
     toolsBox.hidePage(pageMaxAndMinTime);
   }
-
   pageClick1++;
 }, false);
 
@@ -694,10 +657,10 @@ ttPageBackBtn.addEventListener('click', function() {
     for(var i in customTimeState){
       for(var id=0; id<antNum; id++) {
         for (var j in customTimeState[i]) {
-          if(i == 0 && customTimeState[i][j].id==id){
+          if(i==0 && customTimeState[i][j].id==id){
             lastOrder[id]=j;
           }
-          if (i > 0 && customTimeState[i][j].id==id) {
+          if (i>0 && customTimeState[i][j].id==id) {
             var moveDistance = customTimeState[i][j].location - customTimeState[i-1][lastOrder[id]].location;
             lastOrder[id]=j;
             moveDistance = moveDistance > 0 ? moveDistance : -moveDistance;
@@ -710,7 +673,6 @@ ttPageBackBtn.addEventListener('click', function() {
         }
       }
     }
-
   }
 
   if(pageClick2%2==1) {
@@ -738,18 +700,3 @@ ttPageBackBtn.addEventListener('click', function() {
 
 // Hide Splash Screen when everything is loaded
 toolsBox.hideSplashScreen();
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
