@@ -1,3 +1,5 @@
+
+
 document.addEventListener('DOMContentLoaded', function() {
   // Do after the document fully loaded
 });
@@ -235,6 +237,7 @@ StandardModeBtn.addEventListener('click', function() {
     },
     success:function(result){
       console.log('init pole success'+poleLength);
+
     }
   });
 
@@ -404,12 +407,10 @@ MaxAndMinTimeBtn.addEventListener('click', function() {
 // Custom Mode Page Buttons
 // -- Next Step1 Button
 function inputPosition(i,position){
-  if(ants[i]) ants[i][0]=position;
-  else ants.push([position,0,-1])
+  ants[i][0]=position;
 };
 function inputSpeed(i,speed){
-  if(ants[i]) ants[i][1]=speed;
-  else ants.push([0,speed,-1]);
+  ants[i][1]=speed;
 };
 NextStep1Btn.addEventListener('click', function() {
   audioPool.playSound(buttonTap);
@@ -420,6 +421,10 @@ NextStep1Btn.addEventListener('click', function() {
     alert("Please input data!");
     return false;
   };
+
+  for(var i=0; i<antNum-5;i++){
+    ants.push([0,0,-1]);
+  }
 
   $.ajax({
     url : "http://47.100.30.181:8080/initPole",
@@ -443,15 +448,15 @@ NextStep1Btn.addEventListener('click', function() {
     antPositionElement.setAttribute('type','text');
     antPositionElement.setAttribute('oninput',"inputPosition("+i+",this.value)");
     antPositionElement.setAttribute('class','ant-data-input');
-    if(ants[i]) antPositionElement.setAttribute('value',ants[i][0]);
-    else antPositionElement.setAttribute('value',0);
+    antPositionElement.setAttribute('value',ants[i][0]);
+    
 
     antSpeedElement.setAttribute('type','text');
     antSpeedElement.setAttribute('oninput',"inputSpeed("+i+",this.value)");
     antSpeedElement.setAttribute('id',"speed"+i);
     antSpeedElement.setAttribute('class','ant-data-input');
-    if(ants[i]) antSpeedElement.setAttribute('value',ants[i][1]);
-    else antSpeedElement.setAttribute('value',0);
+    antSpeedElement.setAttribute('value',ants[i][1]);
+
 
     $('.position-setting').append('ant '+i+' position  ');
     PositionSettingInputElement.appendChild(antPositionElement);
@@ -471,9 +476,10 @@ NextStep2Btn.addEventListener('click', function() {
   audioPool.playSound(buttonTap);
 
   for(var i=0; i<antNum; i++){
-    if(ants[i][0]<0||ants[i][0]>poleLength){
-      alert("position must between zero and the length of pole!");
+    if(ants[i][0]<0){
+      alert("position "+i+"("+ants[i][0]+"):must be more than zero!");
       return;
+    
     }
     if(ants[i][1]<=0){
       alert("Speed must be more than zero!");
